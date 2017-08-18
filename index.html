@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Neigborhood Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Acme" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
+    <script type='text/javascript' src='knockout-3.4.2.js'></script>
+    <script src="jquery-3.2.1.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            box-sizing: border-box;
+            margin : 0;
+            padding: 0;
+        }
+        #side-menu{
+            position: absolute;
+            left: -300px;
+            float: left;
+            width: 300px;
+            height: 100%;
+            color: white;
+            font-family: 'Acme', sans-serif;
+            background-color: gray;
+            border-color: black;
+            transition: 0.5s;
+            z-index: 1;
+            overflow: scroll;
+        }
+        #map{
+            height: 100%;
+        }
+        #btnForSideMenu{
+            position: absolute;
+            z-index: 1;
+            top: 50px;
+            left: 10px;
+            background-color: gray;
+            color: white;
+            font-family: 'Acme', sans-serif;
+            text-decoration: none;
+            padding: 5px 10px 5px 10px;
+            border: 2px solid black;
+        }
+        #closebtn{
+            position: absolute;
+            color: white;
+            right: 10px;
+            top: 5px;
+            text-decoration: none;
+        }
+        #container-filter {
+            display: -webkit-flex;
+            display: flex;
+        }
+        #inputBox{
+            width: 70%;
+            margin-left: 20px;
+            display: block;
+        }
+        #side-menu h2 {
+            text-align: center;
+            margin: 10px 0px 20px 0px;
+            display: block;
+        }
+        #btnForFilter{
+            border: 0px solid gray;
+            color: white;
+            background-color: #36486b;
+        }
+        #btnForFilter:hover{
+            background-color: blue;
+        }
+        .location-list{
+            background-color: gray;
+            color:white;
+            margin: 10px 10px 10px -20px;
+            list-style-type: none;
+            font-family: 'Open Sans Condensed', sans-serif;
+        }
+        .location-list:hover{
+            background-color: black;
+        }
+        .location-name{
+            font-size: 15px;
+        }
+        .location-adress{
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Button to show Side Menu -->
+    <a href="#" id="btnForSideMenu" onclick="openSideMenu()">Show Side Bar</a>
+
+    <!-- Side Menu -->
+    <div id="side-menu">
+        <a href="#" id="closebtn" onclick="closeSideMenu()"> X </a>
+        <h2> Neigborhood Map</h2>
+        <form id="container-filter" data-bind="submit: searchPlaces" >
+            <input id="inputBox" placeholder="Enter keywords" data-bind="value: searchText">
+            <input id="btnForFilter" type="submit" value="Search">
+        </form>
+        <form id="container-filter">
+            <input id="inputBox" placeholder="Enter keywords" data-bind="value: filterText">
+            <input id="btnForFilter" type="submit" value="Filter">
+        </form>
+        <ul  data-bind="foreach: filteredArray, visible: filteredArray().length > 0">
+                <li class="location-list">
+                    <div class = "location-name" data-bind="text: title"></div>
+                    <div class = "location-adress" data-bind="text: address"></div>
+                </li>
+
+        </ul>
+    </div>
+
+    <!-- placeholder for Google map -->
+    <div id="map"></div>
+
+    <script>
+        var sideMenu = document.getElementById("side-menu");
+        var sideMenuBtn = document.getElementById("btnForSideMenu");
+        var inputBox = document.getElementById("inputBox")
+
+        // a function to show the side menu
+        function openSideMenu(){
+            sideMenu.style.left="0px";
+        }
+
+        // a function to close the side menu
+        function closeSideMenu(){
+            sideMenu.style.left="-300px";
+        }
+
+        // a callback function after getting response from Google maps javascript API
+        function initMap(){
+
+            // ViewModel. It is inside in initMap function so that it envoked after a browserdownload Google maps javascript API library
+         	function viewModel(){
+            	var map = new google.maps.Map(document.getElementById('map'),{
+	                center: {lat:35.02107, lng:135.75385},
+	                zoom: 15
+                });
+
+                //Instantiate the PlaceService objejct from google Place library
+	            var service = new google.maps.places.PlacesService(map)
+	            var initialPoint= new google.maps.LatLng(35.02107, 135.75385);
+                console.log(map.getBounds());
+                service.textSearch({
+                    query:"restaurant",
+                    location: initialPoint,
+                    radius: 400,
+                },callback);
+
+	            function callback(places, status, pagination){
+	                if(status === google.maps.places.PlacesServiceStatus.OK){
+	                    places.forEach (function(place){
+	                        				createMarker(place);
+	                    					// if(pagination.hasNextPage){
+	                        	// 				pagination.nextPage();
+	                        	//			}});
+	                       					 //console.log(pagination);
+	                })}
+                    // else if(status === google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
+                    //     console.log("OVER_QUERY_LIMIT in callbackNearBySearch");
+                    //     // setTimeout(function(){
+                    //     //     callbackNearBySearch(places, status, pagination);
+                    //     // },3000);
+                    // }
+                    else{
+	                    alert("Failure relavant to Google Places API Web Service. " +
+	                           "HTTP Response status is : " + status);
+	                }
+	            } // end of callback
+
+	            function createMarker(place){
+	    			// Create a Marker object
+	    			var marker = new google.maps.Marker({
+	                    position: place.geometry.location,
+                        title: place.name,
+	                    map: map,
+                        address: place.formatted_address,
+                        types: place.types,
+	                });
+                    console.log(marker.address)
+                    // Add a click event to a marker.
+                    google.maps.event.addListener(marker, 'click',
+                            function() {
+                                service.getDetails(place,
+                                    function(place,status){
+                                        var infowindow = new google.maps.InfoWindow();
+                                        infowindow.setContent(
+                                                '<div><strong>' + place.name + '</strong><br>' +
+                                                '<div>' + place.icon + '</div><br>' +
+                                                '<a target ="_blank" href="' + place.website + '"> Go to Website </a><br>');
+                                        //console.log(place.opening_hours.weekday_text)
+                                        console.log(place.photos[0])
+
+                                        //console.log(place.opening_hours.periods.open.time)
+                                        infowindow.open(map, marker);
+                                    }// end of anonymous function in getDetail
+                                )
+                            })// end of anonymous function in addListher and curly bracket of addListner
+
+	               	// Push a merker into a locationArray
+	                self.locationArray.push(marker);
+
+	            }//end of createMarker
+
+                // Data
+                var self = this;
+                self.searchText = ko.observable();
+                self.filterText = ko.observable();
+                self.locationArray = ko.observableArray([]);
+                self.filteredArray = ko.computed(function(){
+                    if( !self.filterText() ){
+                        return self.locationArray();
+                    }else{
+
+                        return  ko.utils.arrayFilter(self.locationArray(), function(marker){
+                                // Return markers whose types match filterText
+                                return marker.types.includes(self.filterText().toLowerCase())
+                                    || marker.address.toLowerCase().includes(self.filterText().toLowerCase())
+                                }) // end of arrayFilter
+                    } // end of if statement
+                }); // end of filteredArray
+
+                // Behaviors
+                self.refreshMarker = function(){
+                    self.locationArray().forEach(function(marker){
+                         marker.setMap(null);
+                    });
+                    self.locationArray([]);
+                };
+
+                self.addPlace = function(place){
+                    self.locationArray.push();
+                };
+
+                self.searchPlaces = function(){
+                    self.refreshMarker();
+                    var inputBox = document.getElementById("inputBox");
+                    var request ={
+                        query: self.searchText(),
+                        bounds: map.getBounds()
+                    };
+                    service.textSearch(request,callback);
+                    console.log(map.getBounds());
+                };
+            } // end of ViewModel
+
+            ko.applyBindings(new viewModel());
+
+        };//end of initMap
+
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAb2AmiCyjfm_66G1VWJRbxzFLjMvJpMho&callback=initMap&libraries=places"
+    async defer > </script>
+
+</body>
+</html>
