@@ -1,0 +1,134 @@
+
+        html, body {
+            height: 100%;
+            box-sizing: border-box;
+            margin : 0;
+            padding: 0;
+        }
+
+        #top-bar{
+            display: flex;
+            height: 50px;
+            width: 100%;
+            color: white;
+            background-color: black;
+        }
+
+        #humbergar{
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 12px 10px 10px 20px;
+            margin: 0;
+        }
+
+        #favorite{
+            font-size: 20px;
+            color: white;
+            text-decoration: none;
+            padding: 10px 10px 10px 20px;
+            margin: 0;
+        }
+
+        #title{
+            /*width: 100%;*/
+            padding: 10px 10px 10px 20px;
+            margin: 0;
+        }
+
+        #top-bar p{
+            font-size: 10px;
+            align-self: flex-end;
+        }
+
+        #side-menu{
+            position: absolute;
+            top : 50px;
+            left: -300px;
+            float: left;
+            width: 300px;
+            height: 100%;
+            color: white;
+            font-family: 'Acme', sans-serif;
+            background-color: gray;
+            border-color: black;
+            transition: 0.5s;
+            z-index: 1;
+            overflow: scroll;
+        }
+
+        #map{
+            height: 100%;
+            width: 100%;*/
+        }
+
+        #container-search {
+            display: -webkit-flex;
+            display: flex;
+            padding-top: 10px;
+            padding-bottom:10px;
+            background-color: #484848;
+        }
+        #container-filter{
+            display: -webkit-flex;
+            display: flex;
+            padding-top: 10px;
+        }
+
+        #inputBox{
+            width: 70%;
+            margin-left: 20px;
+            display: block;
+        }
+
+        #btnForSearch{
+            width: 45px;
+            border: 0px;
+            color: gray;
+            background-color: #FF9966;
+            padding: 0px;
+        }
+
+        #btnForSearch:hover{
+            background-color: #FF9900;
+            color: black;
+        }
+
+        #btnForFilter{
+            width: 45px;
+            border: 0px;
+            color: gray;
+            background-color: #FFFF33;
+            padding: 0px;
+        }
+
+        #btnForFilter:hover{
+            background-color: #FFFF00;
+            color: black;
+        }
+
+        #infoBox{
+            margin: 10px 10px 10px 20px;
+            color:black;
+        }
+
+        .location-list{
+            background-color: gray;
+            color: white;
+            margin: 10px 10px 10px -20px;
+            list-style-type: none;
+            font-family: 'Open Sans Condensed', sans-serif;
+            border-top: 1px solid white;
+        }
+
+        .location-list:hover{
+            background-color: black;
+        }
+
+        .location-name{
+            font-size: 15px;
+        }
+
+        .location-adress{
+            font-size: 10px;
+        }
