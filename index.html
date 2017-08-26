@@ -16,10 +16,19 @@
         <a href="#" id="humbergar" onclick="toggleSideMenu()">&#9776</a>
         <a href="#" id="favorite"> &#9733 </a>
         <p> infomation in infoWindows of markers are provided by Foursquare</p>
+        <h2>aa</h2>
     </div>
 
     <!-- Side Menu -->
     <div id="side-menu">
+        <ul  data-bind="foreach: favorites, visible: favorites().length > 0 ">
+                <li class="location-list">
+                    <div class = "location-name" data-bind="text: title"></div>
+                    <div class = "location-adress" data-bind="text: address"></div>
+                </li>
+        </ul>
+
+
         <form id="container-search" data-bind="submit: searchPlaces" >
             <input id="inputBox" placeholder="Enter types of place. ex: cafe, bar..." data-bind="value: searchText">
             <input id="btnForSearch" type="submit" value="Search">
@@ -39,24 +48,25 @@
                 </li>
         </ul>
     </div>
+
+
     <!-- placeholder for Google map -->
     <div id="map"></div>
 
 
-    <!-- <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
     <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyDbtiMjf_LnCtYah9OdX_vPJ-IQrXLKWmE",
-        authDomain: "neighborhood-map-8c34c.firebaseapp.com",
-        databaseURL: "https://neighborhood-map-8c34c.firebaseio.com",
-        projectId: "neighborhood-map-8c34c",
-        storageBucket: "",
-        messagingSenderId: "373547073978"
-      };
-      firebase.initializeApp(config);
-
-    </script> -->
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDbtiMjf_LnCtYah9OdX_vPJ-IQrXLKWmE",
+            authDomain: "neighborhood-map-8c34c.firebaseapp.com",
+            databaseURL: "https://neighborhood-map-8c34c.firebaseio.com",
+            projectId: "neighborhood-map-8c34c",
+            storageBucket: "",
+            messagingSenderId: "373547073978"
+        };
+        firebase.initializeApp(config);
+    </script>
 
     <script type="text/javascript" src="app.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAb2AmiCyjfm_66G1VWJRbxzFLjMvJpMho&callback=initMap&libraries=places"

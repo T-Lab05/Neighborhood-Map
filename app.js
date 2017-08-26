@@ -186,6 +186,7 @@ function initMap(){
             } // if
         }); // filteredArray
 
+
         // a variable to count the number of items in filteredArray
         self.numberOfLocation = ko.computed(function(){
             return self.filteredArray().length + ' Results for '+ self.searchText();
@@ -213,13 +214,78 @@ function initMap(){
                 marker.setAnimation(null);
             })
             marker.setAnimation(google.maps.Animation.BOUNCE);
+            console.log(self.locationArray())
         }
+
+
+        self.favorites = ko.observableArray([]);
+
+        // Get a reference to the database service
+        var database = firebase.database();
+
+        var placeNameRef = database.ref();
+
+        // var place = new google.maps.Marker({
+        //     title:"testPlace",
+        //     position:{lat: 35.011410, lng: 135.768038},
+        //     //map:map,
+        //     address: "japan, 〒604-8006 京都府京都市中京区 河原町通二条下る二丁目下丸屋町403番地"
+        // });
+
+        var place = {
+            title:"testPlace",
+            position:{lat: 35.011410, lng: 135.768038},
+            address: "japan, 〒604-8006 京都府京都市中京区 河原町通二条下る二丁目下丸屋町403番地"
+        }
+
+        console.log(place)
+        console.log(JSON.stringify(place))
+        //database.ref().push(JSON.stringify(place))
+        database.ref().push(place)
+
+        placeNameRef.on('value', function(snapshot){
+            var snapshotDictionary = snapshot.val();
+            console.log(snapshotDictionary);
+            for ( var index in snapshotDictionary){
+                //var data = JSON.parse(snapshotDictionary[index])
+                var data = snapshotDictionary[index]
+                console.log(data)
+
+                var marker = new google.maps.Marker({
+                    title: data.title,
+                    position: data.position,
+                    address: data.address,
+                    map: map,
+                });
+
+                self.favorites().push(marker)
+
+            }
+            console.log(self.favorites())
+        });
+
+        // placeNameRef.on('value', function(snapshot){
+        //     console.log(snapshot.val().marker)
+        //     var title = snapshot.val().marker.title;
+        //     var address = snapshot.val().marker.address;
+        //     var marker = new google.maps.Marker({
+        //         //position: place.geometry.location,
+        //         title: title,
+        //         address: address,
+        //         //types: place.types,
+        //         map: map
+        //     });
+        //     //push the marker into favorites Array
+        //     self.favorites().push(marker)
+        //     console.log(marker.address)
+        // })
+
+        //database.ref().set(marker)
 
     } // end of ViewModel
 
+
     ko.applyBindings(new viewModel());
-    // var database = firebase.database();
-    //   var data = {"name":"Jan"}
-    //   database.ref().set(data);
+
 
 };//end of initMap
