@@ -11,6 +11,20 @@ function toggleSideMenu(){
     }
 }
 
+function openTab(event, tabName){
+            var tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for( var i = 0; i < tabcontent.length; i++){
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tabcontent");
+            for( var i = 0; i < tablinks.length; i++){
+                tablinks[i].className = tablinks[i].className.replace(" active","");
+            }
+            document.getElementById(tabName).style.display = "block";
+            event.currentTarget.className += " active";
+        }
+
 // a callback function after getting response from Google maps javascript API
 function initMap(){
 
@@ -216,6 +230,7 @@ function initMap(){
             marker.setAnimation(google.maps.Animation.BOUNCE);
             console.log(self.locationArray())
         }
+
 
 
         self.favorites = ko.observableArray([]);

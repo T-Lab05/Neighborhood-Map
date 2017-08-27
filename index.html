@@ -21,34 +21,45 @@
 
     <!-- Side Menu -->
     <div id="side-menu">
-        <ul  data-bind="foreach: favorites, visible: favorites().length > 0 ">
-                <li class="location-list">
-                    <div class = "location-name" data-bind="text: title"></div>
-                    <div class = "location-adress" data-bind="text: address"></div>
-                </li>
-        </ul>
+        <!-- Tab -->
+        <div class="tab">
+            <button class="tablinks" onclick="openTab(event,'search')">Search</button>
+            <button class="tablinks" onclick="openTab(event,'favorite')">favorite</button>
+        </div>
 
+        <!-- Search Tab -->
+        <div id="search" class="tabcontent">
+            <form id="container-search" data-bind="submit: searchPlaces" >
+                <input id="inputBox" placeholder="Enter types of place. ex: cafe, bar..." data-bind="value: searchText">
+                <input id="btnForSearch" type="submit" value="Search">
+            </form>
 
-        <form id="container-search" data-bind="submit: searchPlaces" >
-            <input id="inputBox" placeholder="Enter types of place. ex: cafe, bar..." data-bind="value: searchText">
-            <input id="btnForSearch" type="submit" value="Search">
-        </form>
+            <form id="container-filter">
+                <input id="inputBox" placeholder="ex: part of address or additional type" data-bind="value: filterText">
+                <input id="btnForFilter" type="submit" value="Filter">
+            </form>
 
-        <form id="container-filter">
-            <input id="inputBox" placeholder="ex: part of address or additional type" data-bind="value: filterText">
-            <input id="btnForFilter" type="submit" value="Filter">
-        </form>
+            <div id="infoBox" data-bind="text: numberOfLocation"></div>
 
-        <div id="infoBox" data-bind="text: numberOfLocation"></div>
+            <ul  data-bind="foreach: filteredArray, visible: filteredArray().length > 0">
+                    <li class="location-list" data-bind="click: $root.animateMarker">
+                        <div class = "location-name" data-bind="text: title"></div>
+                        <div class = "location-adress" data-bind="text: address"></div>
+                    </li>
+            </ul>
+        </div>
 
-        <ul  data-bind="foreach: filteredArray, visible: filteredArray().length > 0">
-                <li class="location-list" data-bind="click: $root.animateMarker">
-                    <div class = "location-name" data-bind="text: title"></div>
-                    <div class = "location-adress" data-bind="text: address"></div>
-                </li>
-        </ul>
+        <!-- Filter Tab -->
+        <div id="filter" class="tabcontent">
+            <ul  data-bind="foreach: favorites, visible: favorites().length > 0 ">
+                    <li class="location-list">
+                        <div class = "location-name" data-bind="text: title"></div>
+                        <div class = "location-adress" data-bind="text: address"></div>
+                    </li>
+            </ul>
+        </div>
+
     </div>
-
 
     <!-- placeholder for Google map -->
     <div id="map"></div>
