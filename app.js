@@ -2,6 +2,9 @@
 //grab the side-menu
 var sideMenu = document.getElementById("side-menu");
 var map = document.getElementById('map');
+
+document.getElementById("searchTab").click();
+
 // a function to toggle the side-menu
 function toggleSideMenu(){
     if (sideMenu.style.left=="0px") {
@@ -11,18 +14,33 @@ function toggleSideMenu(){
     }
 }
 
+//a function to display a tab in the side menu
 function openTab(event, tabName){
-            var tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tabcontent");
+            var tabcontent = document.getElementsByClassName("tabcontent");
+            var tablinks = document.getElementsByClassName("tablinks");
+
+            // Disappear all tabs once
             for( var i = 0; i < tabcontent.length; i++){
                 tabcontent[i].style.display = "none";
             }
-            tablinks = document.getElementsByClassName("tabcontent");
+
+            // Remove "active" attribute from classname of all tabs
             for( var i = 0; i < tablinks.length; i++){
                 tablinks[i].className = tablinks[i].className.replace(" active","");
             }
+
+            // Show selected tabcontent and empasize the tablink.
             document.getElementById(tabName).style.display = "block";
             event.currentTarget.className += " active";
+
+            // Set the background color of side menu as gray, once.
+            sideMenu.style.backgroundColor = "gray";
+
+            // If "favorite" tab is selected, change the background color of side menu
+            if(tabName == "favorite"){
+                sideMenu.style.backgroundColor = "#f7f5d7"
+            }
+
         }
 
 // a callback function after getting response from Google maps javascript API
@@ -48,7 +66,6 @@ function initMap(){
             location: map.center,
             radius: 100,
         }
-
         service.textSearch(request,callback);
 
         // Callback function for textSearch
@@ -155,7 +172,7 @@ function initMap(){
         }// createMarker()
 
 
-        // Data Part
+        // ******************* Knockout Object *****************
         var self = this;
 
         // a variable binded to a text to search locations
@@ -166,6 +183,7 @@ function initMap(){
 
         // an array to store marker objects to be searched
         self.locationArray = ko.observableArray([]);
+        console.log(self.locationArray())
 
         // an array to store marker objects to be filtered from locationArray
         self.filteredArray = ko.computed(function(){
@@ -200,6 +218,7 @@ function initMap(){
             } // if
         }); // filteredArray
 
+        console.log(self.filteredArray())
 
         // a variable to count the number of items in filteredArray
         self.numberOfLocation = ko.computed(function(){

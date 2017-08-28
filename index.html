@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Neigborhood Map</title>
-    <meta name="viewport" content="initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Acme" >
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" >
@@ -14,17 +14,15 @@
     <div id="top-bar">
         <h2 id="title"> Neigborhood Map </h2>
         <a href="#" id="humbergar" onclick="toggleSideMenu()">&#9776</a>
-        <a href="#" id="favorite"> &#9733 </a>
         <p> infomation in infoWindows of markers are provided by Foursquare</p>
-        <h2>aa</h2>
     </div>
 
     <!-- Side Menu -->
     <div id="side-menu">
         <!-- Tab -->
         <div class="tab">
-            <button class="tablinks" onclick="openTab(event,'search')">Search</button>
-            <button class="tablinks" onclick="openTab(event,'favorite')">favorite</button>
+            <button class="tablinks" onclick="openTab(event,'search')" id="searchTab">Search</button>
+            <button class="tablinks" onclick="openTab(event,'favorite')" id="filterTab">favorite</button>
         </div>
 
         <!-- Search Tab -->
@@ -49,8 +47,8 @@
             </ul>
         </div>
 
-        <!-- Filter Tab -->
-        <div id="filter" class="tabcontent">
+        <!-- Favorite Tab -->
+        <div id="favorite" class="tabcontent">
             <ul  data-bind="foreach: favorites, visible: favorites().length > 0 ">
                     <li class="location-list">
                         <div class = "location-name" data-bind="text: title"></div>
