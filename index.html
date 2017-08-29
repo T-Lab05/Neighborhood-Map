@@ -22,7 +22,7 @@
         <!-- Tab -->
         <div class="tab">
             <button class="tablinks" onclick="openTab(event,'search')" id="searchTab">Search</button>
-            <button class="tablinks" onclick="openTab(event,'favorite')" id="filterTab">favorite</button>
+            <button class="tablinks" onclick="openTab(event,'favorite')" id="filterTab">&#9733 favorite</button>
         </div>
 
         <!-- Search Tab -->
@@ -40,9 +40,15 @@
             <div id="infoBox" data-bind="text: numberOfLocation"></div>
 
             <ul  data-bind="foreach: filteredArray, visible: filteredArray().length > 0">
-                    <li class="location-list" data-bind="click: $root.animateMarker">
-                        <div class = "location-name" data-bind="text: title"></div>
-                        <div class = "location-adress" data-bind="text: address"></div>
+                    <li class="location-list" >
+                        <div class="information-display" data-bind="click: $root.animateMarker">
+                            <div class = "location-name" data-bind="text: title"></div>
+                            <div class = "location-adress" data-bind="text: address"></div>
+                        </div>
+                        <div class="favorite-display">
+                            <a class="addFavorite" href="#" data-bind="click: $root.addFavorite">&#9733</a>
+                            <div class="hoverText">Add favorite</div>
+                        </div>
                     </li>
             </ul>
         </div>

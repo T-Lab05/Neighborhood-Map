@@ -254,6 +254,19 @@ function initMap(){
 
         self.favorites = ko.observableArray([]);
 
+        // A function to add a location to self.favorites
+        self.addFavorite = function(marker){
+            var exist;
+            self.favorites().forEach(function(favoriteMarker){
+                if(marker.title == favoriteMarker.title){
+                    exist = true;
+                }
+            })
+            if(!exist){
+                self.favorites.push(marker);
+            }
+        }
+
         // Get a reference to the database service
         var database = firebase.database();
 
@@ -291,8 +304,8 @@ function initMap(){
                     address: data.address,
                     map: map,
                 });
-
-                self.favorites().push(marker)
+                console.log(marker);
+                self.favorites().push(marker);
 
             }
             console.log(self.favorites())
