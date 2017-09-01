@@ -22,7 +22,7 @@
         <!-- Tab -->
         <div class="tab">
             <button class="tablinks" onclick="openTab(event,'search')" id="searchTab">Search</button>
-            <button class="tablinks" onclick="openTab(event,'favorite')" id="filterTab">&#9733 favorite</button>
+            <button class="tablinks" onclick="openTab(event,'favorite')" id="favoriteTab">&#9733 favorite</button>
         </div>
 
         <!-- Search Tab -->
@@ -57,9 +57,16 @@
         <div id="favorite" class="tabcontent">
             <ul  data-bind="foreach: favorites, visible: favorites().length > 0 ">
                     <li class="location-list">
-                        <div class = "location-name" data-bind="text: title"></div>
-                        <div class = "location-adress" data-bind="text: address"></div>
+                        <div class="information-display" data-bind="click: $root.animateMarker">
+                            <div class = "location-name" data-bind="text: title"></div>
+                            <div class = "location-adress" data-bind="text: address"></div>
+                        </div>
+                        <div class="remove-display">
+                            <a class="removeFavorite" href="#" data-bind="click: $root.removeFavorite">&#9747</a>
+                            <div class="hoverText">Remove favorite</div>
+                        </div>
                     </li>
+
             </ul>
         </div>
 

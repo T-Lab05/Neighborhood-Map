@@ -67,7 +67,7 @@
             background-color: #ccc;
         }
 
-        #filterTab {
+        #favoriteTab {
             background-color: #d1c734;
         }
 
@@ -173,6 +173,33 @@
             color: yellow;
         }
 
+        .remove-display a {
+            text-decoration: none;
+            color: gray;
+            margin: auto auto auto auto;
+        }
+
+        .remove-display a:hover {
+            color: black;
+        }
+
+        .remove-display .hoverText {
+            font-size: 10px;
+            visibility: hidden;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            padding: 5px 0;
+            border-radius: 3px;
+            /* Position the tooltip text - see examples below! */
+            position: absolute;
+            z-index: 2;
+        }
+
+        .remove-display:hover .hoverText {
+            visibility: visible;
+        }
+
         .favorite-display .hoverText {
             font-size: 10px;
             visibility: hidden;
@@ -190,6 +217,19 @@
             visibility: visible;
         }
 
+        #favorite .location-list {
+            background-color: #f7f5d7;
+            color: gray;
+            margin: 10px 10px 10px -40px;
+            list-style-type: none;
+            font-family: 'Open Sans Condensed', sans-serif;
+            border-top: 1px solid gray;
+            display: flex;
+        }
+
+        #favorite .location-list {
+            color: gray;
+        }
 
         .location-name{
             font-size: 15px;

@@ -3,9 +3,6 @@
 var sideMenu = document.getElementById("side-menu");
 var map = document.getElementById('map');
 
-document.getElementById("searchTab").click();
-
-// a function to toggle the side-menu
 function toggleSideMenu(){
     if (sideMenu.style.left=="0px") {
         sideMenu.style.left = "-300px";
@@ -16,32 +13,35 @@ function toggleSideMenu(){
 
 //a function to display a tab in the side menu
 function openTab(event, tabName){
-            var tabcontent = document.getElementsByClassName("tabcontent");
-            var tablinks = document.getElementsByClassName("tablinks");
+    var tabcontent = document.getElementsByClassName("tabcontent");
+    var tablinks = document.getElementsByClassName("tablinks");
 
-            // Disappear all tabs once
-            for( var i = 0; i < tabcontent.length; i++){
-                tabcontent[i].style.display = "none";
-            }
+    // Disappear all tabs once
+    for( var i = 0; i < tabcontent.length; i++){
+        tabcontent[i].style.display = "none";
+    }
 
-            // Remove "active" attribute from classname of all tabs
-            for( var i = 0; i < tablinks.length; i++){
-                tablinks[i].className = tablinks[i].className.replace(" active","");
-            }
+    // Remove "active" attribute from classname of all tabs
+    for( var i = 0; i < tablinks.length; i++){
+        tablinks[i].className = tablinks[i].className.replace(" active","");
+    }
 
-            // Show selected tabcontent and empasize the tablink.
-            document.getElementById(tabName).style.display = "block";
-            event.currentTarget.className += " active";
+    // Show selected tabcontent and empasize the tablink.
+    document.getElementById(tabName).style.display = "block";
+    event.currentTarget.className += " active";
 
-            // Set the background color of side menu as gray, once.
-            sideMenu.style.backgroundColor = "gray";
+    // Set the background color of side menu as gray, once.
+    sideMenu.style.backgroundColor = "gray";
 
-            // If "favorite" tab is selected, change the background color of side menu
-            if(tabName == "favorite"){
-                sideMenu.style.backgroundColor = "#f7f5d7"
-            }
+    // If "favorite" tab is selected, change the background color of side menu
+    if(tabName == "favorite"){
+        sideMenu.style.backgroundColor = "#f7f5d7"
+    }
+}
 
-        }
+// Click the seachTab as default
+document.getElementById("searchTab").click();
+
 
 // a callback function after getting response from Google maps javascript API
 function initMap(){
@@ -183,7 +183,6 @@ function initMap(){
 
         // an array to store marker objects to be searched
         self.locationArray = ko.observableArray([]);
-        console.log(self.locationArray())
 
         // an array to store marker objects to be filtered from locationArray
         self.filteredArray = ko.computed(function(){
@@ -218,7 +217,6 @@ function initMap(){
             } // if
         }); // filteredArray
 
-        console.log(self.filteredArray())
 
         // a variable to count the number of items in filteredArray
         self.numberOfLocation = ko.computed(function(){
@@ -247,7 +245,6 @@ function initMap(){
                 marker.setAnimation(null);
             })
             marker.setAnimation(google.maps.Animation.BOUNCE);
-            console.log(self.locationArray())
         }
 
 
@@ -256,82 +253,73 @@ function initMap(){
 
         // A function to add a location to self.favorites
         self.addFavorite = function(marker){
-            var exist;
+            // Check if the location is duplicate
+            var exist = false;
             self.favorites().forEach(function(favoriteMarker){
                 if(marker.title == favoriteMarker.title){
                     exist = true;
                 }
             })
+            // When the location is not duplicate, Add it to database
             if(!exist){
-                self.favorites.push(marker);
+                // Replace information from Marker object to Place object,
+                // Because we don't neccessarily store all information of Marker Object.
+                var place = {
+                    title: marker.title,
+                    position: marker.position,
+                    address: marker.address,
+                }
+                database.ref().push(JSON.stringify(place));
             }
+        }
+
+        // A function to remove a marker from favorites array and database
+        self.removeFavorite = function(marker){
+            // Remove the marker from favorites array
+            self.favorites.remove(marker)
+            // Remove the marker from database
+            database.ref(marker.databaseIndex).remove()
         }
 
         // Get a reference to the database service
         var database = firebase.database();
 
-        var placeNameRef = database.ref();
-
-        // var place = new google.maps.Marker({
-        //     title:"testPlace",
-        //     position:{lat: 35.011410, lng: 135.768038},
-        //     //map:map,
-        //     address: "japan, 〒604-8006 京都府京都市中京区 河原町通二条下る二丁目下丸屋町403番地"
-        // });
-
-        var place = {
-            title:"testPlace",
-            position:{lat: 35.011410, lng: 135.768038},
-            address: "japan, 〒604-8006 京都府京都市中京区 河原町通二条下る二丁目下丸屋町403番地"
-        }
-
-        console.log(place)
-        console.log(JSON.stringify(place))
-        //database.ref().push(JSON.stringify(place))
-        database.ref().push(place)
-
-        placeNameRef.on('value', function(snapshot){
+        // Add "value" event listner, which gets all data from database everytime database is changed.
+        database.ref().on('value', function(snapshot){
+            // Grab value of snapshot
             var snapshotDictionary = snapshot.val();
-            console.log(snapshotDictionary);
+            // Iterate through snapshotDictionary
             for ( var index in snapshotDictionary){
-                //var data = JSON.parse(snapshotDictionary[index])
-                var data = snapshotDictionary[index]
-                console.log(data)
-
+                // Parse JSON string
+                var data = JSON.parse(snapshotDictionary[index])
+                // Construct Marker object with data from database
                 var marker = new google.maps.Marker({
                     title: data.title,
                     position: data.position,
                     address: data.address,
                     map: map,
+                    databaseIndex: index
                 });
-                console.log(marker);
-                self.favorites().push(marker);
 
+                // Check if a location has already existed in favorites array
+                var exist = false;
+                self.favorites().forEach(function(exsitingMarker){
+                    if( marker.title == exsitingMarker.title ){
+                        exist = true;
+                    }
+                });
+
+                // When a location is not duplicate, add it to favorites array
+                if(!exist){
+                    self.favorites.push(marker);
+                };
             }
-            console.log(self.favorites())
         });
 
-        // placeNameRef.on('value', function(snapshot){
-        //     console.log(snapshot.val().marker)
-        //     var title = snapshot.val().marker.title;
-        //     var address = snapshot.val().marker.address;
-        //     var marker = new google.maps.Marker({
-        //         //position: place.geometry.location,
-        //         title: title,
-        //         address: address,
-        //         //types: place.types,
-        //         map: map
-        //     });
-        //     //push the marker into favorites Array
-        //     self.favorites().push(marker)
-        //     console.log(marker.address)
-        // })
-
-        //database.ref().set(marker)
 
     } // end of ViewModel
 
-
+    // Bind ViewModel to DOM
     ko.applyBindings(new viewModel());
 
 
