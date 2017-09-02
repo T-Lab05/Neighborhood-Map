@@ -1,9 +1,9 @@
 # Neighborhood-Map
-This is the Web application to search places ant store favorite ones.
+This is the Web application to search places ant store favorite ones around Kyoto, Japan.
 I made it as a project in Front End Nanodegree of Udacity.
 
 ## How to start?
-Just click the following link!
+-- Just click the following link!
 https://t-lab05.github.io/Neighborhood-Map/
 
 ## Feature
