@@ -1,5 +1,6 @@
 # Neighborhood-Map
-A Project in Front End Nanodegree of Udacity
+This is the Web application to search places ant store favorite ones.
+I made it as a project in Front End Nanodegree of Udacity.
 
 # How to start?
 Just click the following link!
@@ -7,13 +8,17 @@ https://t-lab05.github.io/Neighborhood-Map/
 
 # Feature
 ## Search
-
+  You can search a certain type of places by entering key word in the search bar. 
+  
 ## Filter
+  You can filter a search result by entering key word in the filter bar.
+  
 ## Favorite
+  Click the star icon if you find a favorite place. You can see the list of favorite places in the favorite tab.
 
 ## InfoWindow
-click a marker and you will see contact information of the place
+  You will see contact information of a place by clicking a marker. 
 
-## Feature
-## Reference
-Google
+## Attribution
+Google Map javascript API
+Foursquare API
