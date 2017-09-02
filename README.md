@@ -1,5 +1,5 @@
 # Neighborhood-Map
-This is the Web application to search places ant store favorite ones around Kyoto, Japan.
+This is the Web application to search places and store favorite ones around Kyoto, Japan.
 I made it as a project in Front End Nanodegree of Udacity.
 
 ## How to start?
