@@ -40,7 +40,7 @@ function initMap(){
                 };
             // If status is OVER_QUERY_LIMIT, wait for while and redo text seach
             }else if(status === google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
-                concole.log(status)
+                console.log(status)
                 setTimeout(function(){
                     callback(places, status, pagination);
                 },1000);
@@ -156,6 +156,9 @@ function initMap(){
         self.filteredArray = ko.computed(function(){
             // If filterText is not there, just return locationArray
             if( !self.filterText() ){
+                self.locationArray().forEach(function(marker){
+                    marker.setMap(map);
+                })
                 return self.locationArray();
             }else{
                 // Array to stock marekers to be filtered temporarily
