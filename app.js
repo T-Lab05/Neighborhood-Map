@@ -1,6 +1,6 @@
 
 // Grab the side-menu
-var sideMenu = document.getElementById("side-menu");
+var sideMenu = document.getElementById('side-menu');
 // Grab the map div
 var map = document.getElementById('map');
 
@@ -23,7 +23,7 @@ function initMap(){
 
         // Initial request to the textSearch. The map initially displays restaurants in neighborhood.
         var request = {
-            query:"restaurant",
+            query: 'restaurant',
             location: map.center,
             radius: 100,
         }
@@ -46,8 +46,8 @@ function initMap(){
                 },1000);
             // If status is not "success", display the error message.
             }else{
-                alert("Failure relavant to Google Places API Web Service. " +
-                       "HTTP Response status is : " + status);
+                alert('Failure relavant to Google Places API Web Service. ' +
+                       'HTTP Response status is : ' + status);
             }
         } // end of callback
 
@@ -78,9 +78,9 @@ function initMap(){
 
                     // Create a requestURL for forsquare API
                     var targetLocation = marker.position.lat() + ',' + marker.position.lng();
-                    var client_id = "PWPU2CEVBE3WJDSETK4MMNQPW15MYFH3QILODBPBIRJIZOIG";
-                    var client_secret = "RWXQNV005UE2N5I2QBAIENAY4YJMSQEZWI22QS54TGXEWP0Z";
-                    var apiVersion = "20161016";
+                    var client_id = 'PWPU2CEVBE3WJDSETK4MMNQPW15MYFH3QILODBPBIRJIZOIG';
+                    var client_secret = 'RWXQNV005UE2N5I2QBAIENAY4YJMSQEZWI22QS54TGXEWP0Z';
+                    var apiVersion = '20161016';
                     var query = marker.title;
                     var limit = 2;
 
@@ -90,7 +90,7 @@ function initMap(){
 
                     // GET data from foursquare server and process it
                     $.get(requestURL,function(results,status){
-                        if(status == "success"){
+                        if(status == 'success'){
                             if(results.response.venues.length == 0){
                                 infowindow.setContent('<div> Sorry. <br> No infomation about this place.</div>')
                             }else{
@@ -111,13 +111,13 @@ function initMap(){
                                 for(var key in infomationBox){
                                     if(infomationBox[key] !== undefined){
                                         switch(key){
-                                            case "name":
+                                            case 'name':
                                                 contentString = contentString + '<strong> ' + infomationBox[key] + '</strong><br>';
                                                 break;
-                                            case "phone":
+                                            case 'phone':
                                                 contentString = contentString + '<span> Tel :  ' + infomationBox[key] + '</span><br>';
                                                 break;
-                                            case "website":
+                                            case 'website':
                                                 contentString = contentString +'<a target ="_blank" href="' + infomationBox[key]+ '"> Website </a><br>';
                                                 break;
                                         } // switch
@@ -144,10 +144,10 @@ function initMap(){
         var self = this;
 
         // a variable binded to a text to search locations
-        self.searchText = ko.observable("restaurant");
+        self.searchText = ko.observable('restaurant');
 
         // a variable binded to a text to filter locations
-        self.filterText = ko.observable("");
+        self.filterText = ko.observable('');
 
         // an array to store marker objects to be searched
         self.locationArray = ko.observableArray([]);
@@ -257,27 +257,27 @@ function initMap(){
 
         //a function to display the search tab in the side menu, binded to the search tab.
         self.openSearchTab = function(){
-            var tabcontent = document.getElementsByClassName("tabcontent");
-            var tablinks = document.getElementsByClassName("tablinks");
+            var tabcontent = document.getElementsByClassName('tabcontent');
+            var tablinks = document.getElementsByClassName('tablinks');
 
             // Disappear all tabs once
             for( var i = 0; i < tabcontent.length; i++){
-                tabcontent[i].style.display = "none";
+                tabcontent[i].style.display = 'none';
             }
 
             // Remove "active" attribute from classname of all tabs
             for( var i = 0; i < tablinks.length; i++){
-                tablinks[i].className = tablinks[i].className.replace(" active","");
+                tablinks[i].className = tablinks[i].className.replace(' active','');
             }
 
             // Show selected tabcontent and empasize the tablink.
-            var searchTab = document.getElementById("search");
-            searchTab.style.display = "block";
-            searchTab.className += " active";
+            var searchTab = document.getElementById('search');
+            searchTab.style.display = 'block';
+            searchTab.className += ' active';
             //event.currentTarget.className += " active";
 
             // Set the background color of side menu as gray.
-            sideMenu.style.backgroundColor = "gray";
+            sideMenu.style.backgroundColor = 'gray';
 
             self.favorites().forEach(function(marker){
                     marker.setMap(null);
@@ -290,27 +290,27 @@ function initMap(){
 
         //a function to display the favorite tab in the side menu, binded to the favorite tab.
         self.openFavoriteTab = function(){
-            var tabcontent = document.getElementsByClassName("tabcontent");
-            var tablinks = document.getElementsByClassName("tablinks");
+            var tabcontent = document.getElementsByClassName('tabcontent');
+            var tablinks = document.getElementsByClassName('tablinks');
 
             // Disappear all tabs once
             for( var i = 0; i < tabcontent.length; i++){
-                tabcontent[i].style.display = "none";
+                tabcontent[i].style.display = 'none';
             }
 
             // Remove "active" attribute from classname of all tabs
             for( var i = 0; i < tablinks.length; i++){
-                tablinks[i].className = tablinks[i].className.replace(" active","");
+                tablinks[i].className = tablinks[i].className.replace(' active','');
             }
 
             // Show selected tabcontent and empasize the tablink.
-            var favoriteTab = document.getElementById("favorite")
-            favoriteTab.style.display = "block";
-            favoriteTab.className += " active";
+            var favoriteTab = document.getElementById('favorite')
+            favoriteTab.style.display = 'block';
+            favoriteTab.className += ' active';
             //event.currentTarget.className += " active";
 
             // Set the background color of side menu as cream yellow.
-            sideMenu.style.backgroundColor = "#f7f5d7";
+            sideMenu.style.backgroundColor = '#f7f5d7';
 
             self.filteredArray().forEach(function(marker){
                     marker.setMap(null);
@@ -322,10 +322,10 @@ function initMap(){
 
         // A function to toggle the side menu binded to the humbager icon
         self.toggleSideMenu =function(){
-            if (sideMenu.style.left=="0px") {
-                sideMenu.style.left = "-300px";
+            if (sideMenu.style.left == '0px') {
+                sideMenu.style.left = '-300px';
             }else{
-                sideMenu.style.left = "0px";
+                sideMenu.style.left = '0px';
             }
         }
 
