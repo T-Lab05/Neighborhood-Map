@@ -20,5 +20,4 @@ https://t-lab05.github.io/Neighborhood-Map/
   You will see contact information of a place by clicking a marker. 
 
 ## Attribution
-Google Map javascript API
-Foursquare API
+This application is based on Google Map javascript API. Additionally, place details in InfoWindows are provided by Foursquare API.
