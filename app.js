@@ -347,7 +347,6 @@ function initMap(){
                         }
                     });
 
-                    var result = isExist(data,self.favorites());
                     // When a location is not duplicate, add it to favorites array
                     if(!exist){
                         // Make a yellow marker for a favorite place
