@@ -1,4 +1,3 @@
-
 // Grab the side-menu
 var sideMenu = document.getElementById('side-menu');
 // Grab the map div
@@ -19,14 +18,14 @@ function initMap(){
         });
 
         // Instantiate the PlaceService objejct from google Place library
-        var service = new google.maps.places.PlacesService(map)
+        var service = new google.maps.places.PlacesService(map);
 
         // Initial request to the textSearch. The map initially displays restaurants in neighborhood.
         var request = {
             query: 'restaurant',
             location: map.center,
             radius: 100,
-        }
+        };
         service.textSearch(request,callback);
 
         // Callback function for textSearch
@@ -37,10 +36,9 @@ function initMap(){
                                 });
                 if(pagination.hasNextPage){
                     pagination.nextPage();
-                };
+                }
             // If status is OVER_QUERY_LIMIT, wait for while and redo text seach
             }else if(status === google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT) {
-                console.log(status)
                 setTimeout(function(){
                     callback(places, status, pagination);
                 },1000);
@@ -92,7 +90,7 @@ function initMap(){
                     $.get(requestURL,function(results,status){
                         if(status == 'success'){
                             if(results.response.venues.length == 0){
-                                infowindow.setContent('<div> Sorry. <br> No infomation about this place.</div>')
+                                infowindow.setContent('<div> Sorry. <br> No infomation about this place.</div>');
                             }else{
 
                                 var firstCandidate = results.response.venues[0];
@@ -136,7 +134,7 @@ function initMap(){
 
                     }); // anonymous function in $.get( ). Right parenthesis of $.get( )
                 });// anonymous function in addListner( ). Right parenthesis of addListner( )
-        }; //end of addClickEvent()
+        } //end of addClickEvent()
 
 
 
@@ -158,7 +156,7 @@ function initMap(){
             if( !self.filterText() ){
                 self.locationArray().forEach(function(marker){
                     marker.setMap(map);
-                })
+                });
                 return self.locationArray();
             }else{
                 // Array to stock marekers to be filtered temporarily
@@ -175,12 +173,12 @@ function initMap(){
                 // Remove all markers from the map
                 self.locationArray().forEach(function(marker){
                     marker.setMap(null);
-                })
+                });
 
                 // Display markers in returnedArray on the map
                 returnedArray.forEach(function(marker){
                     marker.setMap(map);
-                })
+                });
 
                 return returnedArray;
             } // if
@@ -215,13 +213,13 @@ function initMap(){
             // Stop the current animation
             self.filteredArray().forEach(function(marker){
                 marker.setAnimation(null);
-            })
+            });
             self.favorites().forEach(function(marker){
                 marker.setAnimation(null);
-            })
+            });
             // Make the marker bounce
             marker.setAnimation(google.maps.Animation.BOUNCE);
-        }
+        };
 
         // A function to add a location to self.favorites
         self.addFavorite = function(marker){
@@ -231,7 +229,7 @@ function initMap(){
                 if(marker.title == favoriteMarker.title){
                     exist = true;
                 }
-            })
+            });
             // When the location is not duplicate, Add it to database
             if(!exist){
                 // Replace information from Marker object to Place object,
@@ -240,20 +238,20 @@ function initMap(){
                     title: marker.title,
                     position: marker.position,
                     address: marker.address,
-                }
+                };
                 database.ref().push(JSON.stringify(place));
             }
-        }
+        };
 
         // A function to remove a marker from favorites array and database
         self.removeFavorite = function(marker){
             // Remove the marker icon from the map
-            marker.setMap(null)
+            marker.setMap(null);
             // Remove the marker from favorites array
-            self.favorites.remove(marker)
+            self.favorites.remove(marker);
             // Remove the marker from database
-            database.ref(marker.databaseIndex).remove()
-        }
+            database.ref(marker.databaseIndex).remove();
+        };
 
         //a function to display the search tab in the side menu, binded to the search tab.
         self.openSearchTab = function(){
@@ -266,7 +264,7 @@ function initMap(){
             }
 
             // Remove "active" attribute from classname of all tabs
-            for( var i = 0; i < tablinks.length; i++){
+            for( i = 0; i < tablinks.length; i++){
                 tablinks[i].className = tablinks[i].className.replace(' active','');
             }
 
@@ -286,7 +284,7 @@ function initMap(){
             self.filteredArray().forEach(function(marker){
                     marker.setMap(map);
             });
-        }
+        };
 
         //a function to display the favorite tab in the side menu, binded to the favorite tab.
         self.openFavoriteTab = function(){
@@ -299,12 +297,12 @@ function initMap(){
             }
 
             // Remove "active" attribute from classname of all tabs
-            for( var i = 0; i < tablinks.length; i++){
+            for( i = 0; i < tablinks.length; i++){
                 tablinks[i].className = tablinks[i].className.replace(' active','');
             }
 
             // Show selected tabcontent and empasize the tablink.
-            var favoriteTab = document.getElementById('favorite')
+            var favoriteTab = document.getElementById('favorite');
             favoriteTab.style.display = 'block';
             favoriteTab.className += ' active';
             //event.currentTarget.className += " active";
@@ -318,7 +316,7 @@ function initMap(){
             self.favorites().forEach(function(marker){
                     marker.setMap(map);
             });
-        }
+        };
 
         // A function to toggle the side menu binded to the humbager icon
         self.toggleSideMenu =function(){
@@ -327,7 +325,7 @@ function initMap(){
             }else{
                 sideMenu.style.left = '0px';
             }
-        }
+        };
 
         // Get a reference to the database in Firebase
         var database = firebase.database();
@@ -338,46 +336,49 @@ function initMap(){
             var snapshotDictionary = snapshot.val();
             // Iterate through snapshotDictionary
             for ( var index in snapshotDictionary){
-                // Parse JSON string
-                var data = JSON.parse(snapshotDictionary[index])
-                // Check if a location has already existed in favorites array
-                var exist = false;
-                self.favorites().forEach(function(exsitingMarker){
-                    if( data.title == exsitingMarker.title ){
-                        exist = true;
-                    }
-                });
-
-                // When a location is not duplicate, add it to favorites array
-                if(!exist){
-                    // Make a yellow marker for a favorite place
-                    var yellowIcon = new google.maps.MarkerImage(
-                        'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|FFFF00|40|_|%E2%80%A2',
-                        new google.maps.Size(21, 34),
-                        new google.maps.Point(0, 0),
-                        new google.maps.Point(10, 34),
-                        new google.maps.Size(21,34)
-                    );
-
-                    // Construct Marker object with data from database.
-                    // Note to store database index key for later use.
-                    // We also change marker color for favorite places.
-                    var marker = new google.maps.Marker({
-                        title: data.title,
-                        position: data.position,
-                        address: data.address,
-                        icon: yellowIcon,
-                        databaseIndex: index
+                if(snapshotDictionary.hasOwnProperty(index)){
+                    // Parse JSON string
+                    var data = JSON.parse(snapshotDictionary[index]);
+                    // Check if a location has already existed in favorites array
+                    var exist = false;
+                    self.favorites().forEach(function(exsitingMarker){
+                        if( data.title == exsitingMarker.title ){
+                            exist = true;
+                        }
                     });
 
-                    // Add event listener for infoWindow
-                    addClickEvent(marker);
+                    var result = isExist(data,self.favorites());
+                    // When a location is not duplicate, add it to favorites array
+                    if(!exist){
+                        // Make a yellow marker for a favorite place
+                        var yellowIcon = new google.maps.MarkerImage(
+                            'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|FFFF00|40|_|%E2%80%A2',
+                            new google.maps.Size(21, 34),
+                            new google.maps.Point(0, 0),
+                            new google.maps.Point(10, 34),
+                            new google.maps.Size(21,34)
+                        );
 
-                    // Add the marker to favorites array
-                    self.favorites.push(marker);
-                };
-            }
-        });
+                        // Construct Marker object with data from database.
+                        // Note to store database index key for later use.
+                        // We also change marker color for favorite places.
+                        var marker = new google.maps.Marker({
+                            title: data.title,
+                            position: data.position,
+                            address: data.address,
+                            icon: yellowIcon,
+                            databaseIndex: index
+                        });
+
+                        // Add event listener for infoWindow
+                        addClickEvent(marker);
+
+                        // Add the marker to favorites array
+                        self.favorites.push(marker);
+                    }
+                }
+            } //for loop
+        }); // eventlistener
 
     // Open the search tab when this app starts.
     self.openSearchTab();
@@ -388,4 +389,4 @@ function initMap(){
     ko.applyBindings(new viewModel());
 
 
-};//end of initMap
+}//end of initMap
