@@ -89,7 +89,7 @@ function initMap(){
                     // GET data from foursquare server and process it
                     $.get(requestURL,function(results,status){
                         if(status == 'success'){
-                            if(results.response.venues.length == 0){
+                            if(results.response.venues.length === 0){
                                 infowindow.setContent('<div> Sorry. <br> No infomation about this place.</div>');
                             }else{
 
@@ -335,19 +335,21 @@ function initMap(){
             // Grab value of snapshot
             var snapshotDictionary = snapshot.val();
             // Iterate through snapshotDictionary
-            for ( var index in snapshotDictionary){
-                if(snapshotDictionary.hasOwnProperty(index)){
+            for ( var key in snapshotDictionary){
+                if(snapshotDictionary.hasOwnProperty(key)){
                     // Parse JSON string
-                    var data = JSON.parse(snapshotDictionary[index]);
-                    // Check if a location has already existed in favorites array
+                    var data = JSON.parse(snapshotDictionary[key]);
+                    // a flag to indicate the existance of marker in favorites array
                     var exist = false;
-                    self.favorites().forEach(function(exsitingMarker){
-                        if( data.title == exsitingMarker.title ){
+
+                    // Check if a location has already existed in favorites array
+                    for (var i = 0; i < self.favorites().length; i++){
+                        if( data.title == self.favorites()[i].title){
                             exist = true;
                         }
-                    });
+                    }
 
-                    // When a location is not duplicate, add it to favorites array
+                    // When a location is not duplicate, add it to favorites array.
                     if(!exist){
                         // Make a yellow marker for a favorite place
                         var yellowIcon = new google.maps.MarkerImage(
@@ -366,7 +368,7 @@ function initMap(){
                             position: data.position,
                             address: data.address,
                             icon: yellowIcon,
-                            databaseIndex: index
+                            databaseIndex: key
                         });
 
                         // Add event listener for infoWindow
