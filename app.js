@@ -17,6 +17,9 @@ function initMap(){
             },
         });
 
+        // Instantiate a InfoWindow object
+        var infowindow = new google.maps.InfoWindow();
+
         // Instantiate the PlaceService objejct from google Place library
         var service = new google.maps.places.PlacesService(map);
 
@@ -71,8 +74,11 @@ function initMap(){
             // Add a click event to a marker.
             google.maps.event.addListener(marker, 'click',
                 function() {
-                    // Instantiate a InfoWindow object
-                    var infowindow = new google.maps.InfoWindow();
+                    // Set the center of the map at the marker
+                    map.setCenter(marker.getPosition());
+
+                    // Animate marker and change the center of map
+                    self.animateMarker(marker);
 
                     // Create a requestURL for forsquare API
                     var targetLocation = marker.position.lat() + ',' + marker.position.lng();
@@ -132,7 +138,10 @@ function initMap(){
 
                     infowindow.open(map,marker);
 
-                    }); // anonymous function in $.get( ). Right parenthesis of $.get( )
+                    }) // anonymous function in $.get( ). Right parenthesis of $.get( )
+                        .fail(function(){
+                            alert("Failure to get information from Foursquare");
+                        });
                 });// anonymous function in addListner( ). Right parenthesis of addListner( )
         } //end of addClickEvent()
 
@@ -219,6 +228,8 @@ function initMap(){
             });
             // Make the marker bounce
             marker.setAnimation(google.maps.Animation.BOUNCE);
+            // Set the center of the map at the marker
+            map.setCenter(marker.getPosition());
         };
 
         // A function to add a location to self.favorites
@@ -319,7 +330,7 @@ function initMap(){
         };
 
         // A function to toggle the side menu binded to the humbager icon
-        self.toggleSideMenu =function(){
+        self.toggleSideMenu = function(){
             if (sideMenu.style.left == '0px') {
                 sideMenu.style.left = '-300px';
             }else{
