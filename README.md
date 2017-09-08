@@ -3,7 +3,9 @@ This is the Web application to search places and store favorite ones around Kyot
 I made it as a project in Front End Nanodegree of Udacity.
 
 ## How to start?
--- Just click the following link!
+  1. Download zipfile and open the folder
+  2. Open index.html with your web browser
+Note: You can use the app just by clicking the following link!
 https://t-lab05.github.io/Neighborhood-Map/
 
 ## Feature
