@@ -3,6 +3,23 @@ var sideMenu = document.getElementById('side-menu');
 // Grab the map div
 var map = document.getElementById('map');
 
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyDbtiMjf_LnCtYah9OdX_vPJ-IQrXLKWmE",
+    authDomain: "neighborhood-map-8c34c.firebaseapp.com",
+    databaseURL: "https://neighborhood-map-8c34c.firebaseio.com",
+    projectId: "neighborhood-map-8c34c",
+    storageBucket: "",
+    messagingSenderId: "373547073978"
+};
+firebase.initializeApp(config);
+
+// Error handling function for loading Google Map API
+function mapError(){
+    alert("Failure to load Google Map API");
+}
+
+
 // A callback function after getting response from Google maps javascript API
 function initMap(){
 
@@ -80,71 +97,73 @@ function initMap(){
                     // Animate marker and change the center of map
                     self.animateMarker(marker);
 
-                    // Create a requestURL for forsquare API
-                    var targetLocation = marker.position.lat() + ',' + marker.position.lng();
-                    var client_id = 'PWPU2CEVBE3WJDSETK4MMNQPW15MYFH3QILODBPBIRJIZOIG';
-                    var client_secret = 'RWXQNV005UE2N5I2QBAIENAY4YJMSQEZWI22QS54TGXEWP0Z';
-                    var apiVersion = '20161016';
-                    var query = marker.title;
-                    var limit = 2;
-
-                    // Create a requestURL for foursquare API
-                    var requestURL = 'https://api.foursquare.com/v2/venues/search?' + 'll=' + targetLocation + '&client_id=' + client_id + '&client_secret=' +
-                        client_secret + '&v=' + apiVersion + '&query=' + query + '&limit=' + limit;
-
-                    // GET data from foursquare server and process it
-                    $.get(requestURL,function(results,status){
-                        if(status == 'success'){
-                            if(results.response.venues.length === 0){
-                                infowindow.setContent('<div> Sorry. <br> No infomation about this place.</div>');
-                            }else{
-
-                                var firstCandidate = results.response.venues[0];
-
-                                // Store only useful values in a dictionary from the results
-                                var infomationBox = {
-                                    name: firstCandidate.name,
-                                    phone: firstCandidate.contact.formattedPhone,
-                                    website: firstCandidate.url,
-                                };
-
-                                // HTML String to insert an InfoWindow later
-                                var contentString ='';
-
-                                // Iterate through the infomationBox and add HTML String when a value is not "undefined".
-                                for(var key in infomationBox){
-                                    if(infomationBox[key] !== undefined){
-                                        switch(key){
-                                            case 'name':
-                                                contentString = contentString + '<strong> ' + infomationBox[key] + '</strong><br>';
-                                                break;
-                                            case 'phone':
-                                                contentString = contentString + '<span> Tel :  ' + infomationBox[key] + '</span><br>';
-                                                break;
-                                            case 'website':
-                                                contentString = contentString +'<a target ="_blank" href="' + infomationBox[key]+ '"> Website </a><br>';
-                                                break;
-                                        } // switch
-                                    } // if
-                                }// for loop
-
-                                // set contents on an InfoWindow
-                                infowindow.setContent(contentString);
-                            } // inner if
-
-                        }else{
-                            infowindow.setContent('<div>Error: '  + status + '</div>');
-                        }// outer if
-
-                    infowindow.open(map,marker);
-
-                    }) // anonymous function in $.get( ). Right parenthesis of $.get( )
-                        .fail(function(){
-                            alert("Failure to get information from Foursquare");
-                        });
-                });// anonymous function in addListner( ). Right parenthesis of addListner( )
+                    getInfo(marker);
+                });
         } //end of addClickEvent()
 
+        function getInfo(marker){
+            // Create a requestURL for forsquare API
+            var targetLocation = marker.position.lat() + ',' + marker.position.lng();
+            var client_id = 'PWPU2CEVBE3WJDSETK4MMNQPW15MYFH3QILODBPBIRJIZOIG';
+            var client_secret = 'RWXQNV005UE2N5I2QBAIENAY4YJMSQEZWI22QS54TGXEWP0Z';
+            var apiVersion = '20161016';
+            var query = marker.title;
+            var limit = 2;
+
+            // Create a requestURL for foursquare API
+            var requestURL = 'https://api.foursquare.com/v2/venues/search?' + 'll=' + targetLocation + '&client_id=' + client_id + '&client_secret=' +
+                        client_secret + '&v=' + apiVersion + '&query=' + query + '&limit=' + limit;
+
+            // GET data from foursquare server and process it
+            $.get(requestURL,function(results,status){
+                if(status == 'success'){
+                    if(results.response.venues.length === 0){
+                        infowindow.setContent('<div> Sorry. <br> No infomation about this place.</div>');
+                    }else{
+                        // Grab the first item from the list of venues
+                        var firstCandidate = results.response.venues[0];
+                        // Store only useful values in a dictionary from the results
+                        var infomationBox = {
+                            name: firstCandidate.name,
+                            phone: firstCandidate.contact.formattedPhone,
+                            website: firstCandidate.url,
+                        };
+
+                        // HTML String to insert an InfoWindow later
+                        var contentString ='';
+
+                        // Iterate through the infomationBox and add HTML String when a value is not "undefined".
+                        for(var key in infomationBox){
+                            if(infomationBox[key] !== undefined){
+                                switch(key){
+                                    case 'name':
+                                        contentString = contentString + '<strong> ' + infomationBox[key] + '</strong><br>';
+                                        break;
+                                    case 'phone':
+                                        contentString = contentString + '<span> Tel :  ' + infomationBox[key] + '</span><br>';
+                                        break;
+                                    case 'website':
+                                        contentString = contentString +'<a target ="_blank" href="' + infomationBox[key]+ '"> Website </a><br>';
+                                        break;
+                                } // switch
+                            } // if
+                        }// for loop
+
+                        // set contents on an InfoWindow
+                        infowindow.setContent(contentString);
+                    } // inner if else
+
+                }else {
+                    infowindow.setContent('<div>Error: '  + status + '</div>');
+                }// outer if
+
+                infowindow.open(map,marker);
+
+            }) // anonymous function in $.get( ). Right parenthesis of $.get( )
+            .fail(function(){
+                alert("Failure to get information from Foursquare");
+            });
+        }
 
 
         // ******************* Knockout Object ***************************************************
@@ -230,6 +249,8 @@ function initMap(){
             marker.setAnimation(google.maps.Animation.BOUNCE);
             // Set the center of the map at the marker
             map.setCenter(marker.getPosition());
+            // get infomation and show it
+            getInfo(marker);
         };
 
         // A function to add a location to self.favorites
@@ -329,13 +350,11 @@ function initMap(){
             });
         };
 
-        // A function to toggle the side menu binded to the humbager icon
+        // A observable variable to indicate the side menu appearance
+        self.sideMenu = ko.observable(false);
+        // A function to toggle the state of side menu
         self.toggleSideMenu = function(){
-            if (sideMenu.style.left == '0px') {
-                sideMenu.style.left = '-300px';
-            }else{
-                sideMenu.style.left = '0px';
-            }
+            self.sideMenu(!self.sideMenu());
         };
 
         // Get a reference to the database in Firebase
