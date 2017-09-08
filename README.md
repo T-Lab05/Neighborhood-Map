@@ -6,8 +6,7 @@ I made it as a project in Front End Nanodegree of Udacity.
   1. Download zip file and open the folder.
   2. Open index.html with your web browser.
 
-Note: You can use the app just by clicking the following link!
-https://t-lab05.github.io/Neighborhood-Map/
+  Note: You can also use the app just by clicking the following link: https://t-lab05.github.io/Neighborhood-Map/
 
 ## Feature
 - ### Search
